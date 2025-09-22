@@ -2456,6 +2456,10 @@ class EntryTest extends TestCase
     {
         $eventsHandled = 0;
 
+        $collection = (new Collection)->handle('pages')->save();
+        $entry = (new Entry)->id('a')->collection($collection);
+        $entry->save();
+
         Event::listen(function (EntryCreating $event) use (&$eventsHandled) {
             $eventsHandled++;
             $this->assertTrue($event->entry->isDirty());
@@ -2473,8 +2477,6 @@ class EntryTest extends TestCase
             $this->assertTrue($event->entry->isDirty());
         });
 
-        $collection = (new Collection)->handle('pages')->save();
-        $entry = (new Entry)->id('a')->collection($collection);
         $entry->save();
 
         $this->assertFalse($entry->isDirty());
